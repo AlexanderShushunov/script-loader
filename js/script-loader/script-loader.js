@@ -10,13 +10,13 @@ window.ScriptLoader = window.ScriptLoader || {};
 
     ScriptLoader.load = function (scriptOrScripts, doneCallBack) {
         var scripts = toArray(scriptOrScripts);
-        var isStarted = loadTasks.length != 0;
+        var hasLoadingAlreadyStarted = loadTasks.length != 0;
         loadParamStack.push({
             "doneCallBack": doneCallBack,
             "scripts": scripts
         });
         addTasks(scripts);
-        if (!isStarted) {
+        if (!hasLoadingAlreadyStarted) {
             loadNext();
         }
     };
