@@ -11,6 +11,9 @@
                 throw new Error("SomeClass is a constructor.");
             }
         };
+        // use loaded functionality
+        SomeUtil.veryHelpfulFoo();
+
         console.log("SomeClass loaded");
     });
 })(window);

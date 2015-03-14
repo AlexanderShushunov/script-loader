@@ -9,6 +9,8 @@ window.SomeUtil = window.SomeUtil || {};
         // public static methods
         SomeUtil.veryHelpfulFoo = function () {
         };
+        // use loaded functionality
+        SomeSubUtil.foo();
         console.log("SomeUtil loaded");
     });
 })(window.SomeUtil);
