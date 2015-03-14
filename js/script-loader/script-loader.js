@@ -3,7 +3,7 @@
 window.ScriptLoader = window.ScriptLoader || {};
 (function (ScriptLoader) {
 
-    var LAST_SCRIPT_URL = "js/script-loader/last-script.js";
+    var LAST_SCRIPT_URL = getCurrentScriptPath() + "last-script.js";
 
     var loadParamStack = [];
     var loadTasks = [];
@@ -60,12 +60,20 @@ window.ScriptLoader = window.ScriptLoader || {};
         }
     }
 
+    // utils
     function toArray(val) {
         if (Array.isArray(val)) {
             return val;
         } else {
             return [val];
         }
+    }
+
+    function getCurrentScriptPath() {
+        var scripts = document.querySelectorAll('script[src]');
+        var currentScriptPath = scripts[scripts.length - 1].src;
+        var lastSeparatorIndex = currentScriptPath.lastIndexOf("/");
+        return currentScriptPath.substring(0, lastSeparatorIndex + 1);
     }
 
 })(window.ScriptLoader);
