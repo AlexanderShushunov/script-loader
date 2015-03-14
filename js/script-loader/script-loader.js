@@ -36,17 +36,18 @@ window.ScriptLoader = window.ScriptLoader || {};
 
     function loadNext() {
         var task = loadTasks.pop();
-        loadOneScriptSync(task);
-        window.setTimeout(
-        function() {
+        loadOneScriptSync(task, function () {
             if (loadTasks.length != 0) {
                 loadNext();
             }
-        }, 100);
+        });
     }
 
-    function loadOneScriptSync(url) {
+    function loadOneScriptSync(url, onload) {
         var script = document.createElement('script');
+        if (onload) {
+            script.onload = onload;
+        }
         script.src = url;
         script.async = false;
         document.head.appendChild(script);
