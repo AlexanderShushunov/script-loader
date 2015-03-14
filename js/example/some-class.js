@@ -3,7 +3,7 @@
 (function (Namespace) {
     console.log("SomeClass start loading");
     ScriptLoader.load([
-        "js/some-util.js"
+        "js/example/some-util.js"
     ], function () {
         // constructor
         Namespace.SomeClass = function SomeClass() {
