@@ -4,9 +4,14 @@ window.ScriptLoader = window.ScriptLoader || {};
 (function (ScriptLoader) {
 
     var LAST_SCRIPT_URL = getCurrentScriptPath() + "last-script.js";
+    var DEFAULT_OPT = {
+        logEnable : false
+    };
 
     var loadParamStack = [];
     var loadTasks = [];
+
+    ScriptLoader.options = ScriptLoader.options || DEFAULT_OPT;
 
     ScriptLoader.load = function (scriptOrScripts, doneCallBack) {
         var scripts = toArray(scriptOrScripts);
@@ -54,9 +59,11 @@ window.ScriptLoader = window.ScriptLoader || {};
     }
 
     function logLoadedScripts(scripts) {
-        console.log("scripts loaded:");
-        for (var cou = 0; cou < scripts.length; cou++) {
-            console.log("  - " + scripts[cou]);
+        if (ScriptLoader.options.logEnable) {
+            console.log("scripts loaded:");
+            for (var cou = 0; cou < scripts.length; cou++) {
+                console.log("  - " + scripts[cou]);
+            }
         }
     }
 
