@@ -1,7 +1,7 @@
 "use strict";
 
 (function (Namespace) {
-    console.log("SomeClass start loading");
+    window.loadingMarks += "SoCS,";
     ScriptLoader.load([
         "js/example/some-util.js"
     ], function () {
@@ -14,6 +14,6 @@
         // use loaded functionality
         SomeUtil.veryHelpfulFoo();
 
-        console.log("SomeClass loaded");
+        window.loadingMarks += "SoCE,";
     });
 })(window);

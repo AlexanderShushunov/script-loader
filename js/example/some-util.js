@@ -2,7 +2,7 @@
 
 window.SomeUtil = window.SomeUtil || {};
 (function (SomeUtil) {
-    console.log("SomeUtil start loading");
+    window.loadingMarks += "SuCS,";
     ScriptLoader.load([
         "js/example/some-sub-util.js"
     ], function () {
@@ -11,6 +11,6 @@ window.SomeUtil = window.SomeUtil || {};
         };
         // use loaded functionality
         SomeSubUtil.foo();
-        console.log("SomeUtil loaded");
+        window.loadingMarks += "SuCE,";
     });
 })(window.SomeUtil);
