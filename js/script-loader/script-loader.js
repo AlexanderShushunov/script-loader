@@ -5,44 +5,44 @@ window.ScriptLoader = window.ScriptLoader || {};
 
     var LAST_SCRIPT_URL = getCurrentScriptPath() + "last-script.js";
     var DEFAULT_OPT = {
-        logEnable : false
+        logEnable: false
     };
 
-    var loadParamStack = [];
-    var loadTasks = [];
+    var loadParamsStack = [];
+    var urlsToLoadStack = [];
 
     ScriptLoader.options = ScriptLoader.options || DEFAULT_OPT;
 
-    ScriptLoader.load = function (scriptOrScripts, doneCallBack) {
-        var scripts = toArray(scriptOrScripts);
-        var hasLoadingAlreadyStarted = loadTasks.length != 0;
-        loadParamStack.push({
+    ScriptLoader.load = function (scriptUrlsBundle, doneCallBack) {
+        scriptUrlsBundle = toArray(scriptUrlsBundle);
+        var hasLoadingAlreadyStarted = urlsToLoadStack.length != 0;
+        loadParamsStack.push({
             "doneCallBack": doneCallBack,
-            "scripts": scripts
+            "scriptUrlsBundle": scriptUrlsBundle
         });
-        addTasks(scripts);
+        pushUrlToStack(scriptUrlsBundle);
         if (!hasLoadingAlreadyStarted) {
             loadNext();
         }
     };
 
-    ScriptLoader.lastScriptLoaded = function () {
-        var loadParam = loadParamStack.pop();
-        logLoadedScripts(loadParam.scripts);
+    ScriptLoader.lastScriptInBundleLoadedAndEvaluated = function () {
+        var loadParam = loadParamsStack.pop();
+        logLoadedScripts(loadParam.scriptUrlsBundle);
         if (loadParam.doneCallBack) {
             loadParam.doneCallBack();
         }
     };
 
-    function addTasks(scripts) {
-        loadTasks.push(LAST_SCRIPT_URL);
-        Array.prototype.push.apply(loadTasks, scripts.reverse());
+    function pushUrlToStack(scriptUrlsBundle) {
+        urlsToLoadStack.push(LAST_SCRIPT_URL);
+        Array.prototype.push.apply(urlsToLoadStack, scriptUrlsBundle.reverse());
     }
 
     function loadNext() {
-        var task = loadTasks.pop();
-        loadOneScriptSync(task, function () {
-            if (loadTasks.length != 0) {
+        var url = urlsToLoadStack.pop();
+        loadOneScriptSync(url, function () {
+            if (urlsToLoadStack.length != 0) {
                 loadNext();
             }
         });
@@ -58,11 +58,11 @@ window.ScriptLoader = window.ScriptLoader || {};
         document.head.appendChild(script);
     }
 
-    function logLoadedScripts(scripts) {
+    function logLoadedScripts(scriptUrls) {
         if (ScriptLoader.options.logEnable) {
             console.log("scripts loaded:");
-            for (var cou = 0; cou < scripts.length; cou++) {
-                console.log("  - " + scripts[cou]);
+            for (var cou = 0; cou < scriptUrls.length; cou++) {
+                console.log("  - " + scriptUrls[cou]);
             }
         }
     }
