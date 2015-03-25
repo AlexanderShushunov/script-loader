@@ -3,7 +3,7 @@
 window.ScriptLoader = window.ScriptLoader || {};
 (function (ScriptLoader) {
 
-    var LAST_SCRIPT_URL =  ScriptLoader.getCurrentScriptPath() + "last-script.js";
+    var LAST_SCRIPT_URL =  getCurrentScriptPath() + "last-script.js";
     var DEFAULT_OPT = {
         logEnable: false
     };
@@ -34,12 +34,7 @@ window.ScriptLoader = window.ScriptLoader || {};
         }
     };
 
-    ScriptLoader.getCurrentScriptPath = function() {
-        var scripts = document.querySelectorAll('script[src]');
-        var currentScriptPath = scripts[scripts.length - 1].src;
-        var lastSeparatorIndex = currentScriptPath.lastIndexOf("/");
-        return currentScriptPath.substring(0, lastSeparatorIndex + 1);
-    };
+    ScriptLoader.getCurrentScriptPath = getCurrentScriptPath;
 
     function pushUrlToStack(scriptUrlsBundle) {
         urlsToLoadStack.push(LAST_SCRIPT_URL);
@@ -72,6 +67,13 @@ window.ScriptLoader = window.ScriptLoader || {};
                 console.log("  - " + scriptUrls[cou]);
             }
         }
+    }
+
+    function getCurrentScriptPath() {
+        var scripts = document.querySelectorAll('script[src]');
+        var currentScriptPath = scripts[scripts.length - 1].src;
+        var lastSeparatorIndex = currentScriptPath.lastIndexOf("/");
+        return currentScriptPath.substring(0, lastSeparatorIndex + 1);
     }
 
     // utils
