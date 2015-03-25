@@ -3,7 +3,7 @@
 window.ScriptLoader = window.ScriptLoader || {};
 (function (ScriptLoader) {
 
-    var LAST_SCRIPT_URL = getCurrentScriptPath() + "last-script.js";
+    var LAST_SCRIPT_URL =  ScriptLoader.getCurrentScriptPath() + "last-script.js";
     var DEFAULT_OPT = {
         logEnable: false
     };
@@ -32,6 +32,13 @@ window.ScriptLoader = window.ScriptLoader || {};
         if (loadParam.doneCallBack) {
             loadParam.doneCallBack();
         }
+    };
+
+    ScriptLoader.getCurrentScriptPath = function() {
+        var scripts = document.querySelectorAll('script[src]');
+        var currentScriptPath = scripts[scripts.length - 1].src;
+        var lastSeparatorIndex = currentScriptPath.lastIndexOf("/");
+        return currentScriptPath.substring(0, lastSeparatorIndex + 1);
     };
 
     function pushUrlToStack(scriptUrlsBundle) {
@@ -74,13 +81,6 @@ window.ScriptLoader = window.ScriptLoader || {};
         } else {
             return [val];
         }
-    }
-
-    function getCurrentScriptPath() {
-        var scripts = document.querySelectorAll('script[src]');
-        var currentScriptPath = scripts[scripts.length - 1].src;
-        var lastSeparatorIndex = currentScriptPath.lastIndexOf("/");
-        return currentScriptPath.substring(0, lastSeparatorIndex + 1);
     }
 
 })(window.ScriptLoader);
