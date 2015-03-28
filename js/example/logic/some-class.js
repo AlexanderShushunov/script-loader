@@ -1,9 +1,10 @@
 "use strict";
 
 (function (Namespace) {
-    window.loadingMarks += "SoCS,";
+    window.loadingMarks += "SomeClass_Start,";
     ScriptLoader.load([
-        "js/example/some-util.js"
+        "http://yastatic.net/underscore/1.6.0/underscore.js",
+        "../utils/some-util.js"
     ], function () {
         // constructor
         Namespace.SomeClass = function SomeClass() {
@@ -14,6 +15,10 @@
         // use loaded functionality
         SomeUtil.veryHelpfulFoo();
 
-        window.loadingMarks += "SoCE,";
+        if (_) {
+            window.loadingMarks += "Underscore_Available,";
+        }
+
+        window.loadingMarks += "SomeClass_Loaded,";
     });
 })(window);

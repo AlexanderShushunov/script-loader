@@ -3,15 +3,26 @@
 (function () {
     window.loadingMarks = "";
     ScriptLoader.load([
-        "js/example/some-class.js",
-        "js/example/second-class.js"
+        "html:js/example/logic/some-class.js",
+        "logic/second-class.js"
     ], function () {
-        window.loadingMarks += "AllE";
+        window.loadingMarks += "All_Tree_Loaded";
         checkLoadingOrder();
     });
 
     var checkLoadingOrder = function () {
-        if (window.loadingMarks == "SoCS,SuCS,SsCS,SsCE,SuCE,SoCE,SeCS,SeCE,AllE") {
+        if (window.loadingMarks ==
+                    "SomeClass_Start," +
+                        "SomeUtil_Start," +
+                            "SomeSubUtil_Start," +
+                                "TestUtil_Available," +
+                            "SomeSubUtil_End," +
+                        "SomeUtil_End," +
+                        "Underscore_Available," +
+                    "SomeClass_Loaded," +
+                    "SecondClass_Start," +
+                    "SecondClass_Loaded," +
+                "All_Tree_Loaded") {
             console.log("ОК");
         } else {
             console.log("Something is wrong");

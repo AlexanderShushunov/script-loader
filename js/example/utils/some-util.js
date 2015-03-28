@@ -2,15 +2,15 @@
 
 window.SomeUtil = window.SomeUtil || {};
 (function (SomeUtil) {
-    window.loadingMarks += "SuCS,";
+    window.loadingMarks += "SomeUtil_Start,";
     ScriptLoader.load([
-        "js/example/some-sub-util.js"
+        "some-sub-util.js"
     ], function () {
         // public static methods
         SomeUtil.veryHelpfulFoo = function () {
         };
         // use loaded functionality
         SomeSubUtil.foo();
-        window.loadingMarks += "SuCE,";
+        window.loadingMarks += "SomeUtil_End,";
     });
 })(window.SomeUtil);
