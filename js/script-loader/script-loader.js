@@ -11,6 +11,7 @@ window.ScriptLoader = window.ScriptLoader || {};
 	var loadParamsStack = [];
 	var urlsToLoadStack = [];
 
+
 	ScriptLoader.options = ScriptLoader.options || DEFAULT_OPT;
 
 	/**
