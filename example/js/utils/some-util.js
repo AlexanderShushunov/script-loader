@@ -4,7 +4,8 @@ window.SomeUtil = window.SomeUtil || {};
 (function (SomeUtil) {
     window.loadingMarks += "SomeUtil_Start,";
     ScriptLoader.load([
-        "some-sub-util.js"
+        "some-sub-util.js",
+        "test-util.js"
     ], function () {
         // public static methods
         SomeUtil.veryHelpfulFoo = function () {

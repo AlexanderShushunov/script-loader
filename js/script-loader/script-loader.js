@@ -18,7 +18,7 @@ window.ScriptLoader = window.ScriptLoader || {};
 	 * @param scriptUrlsBundle Array with script urls. Can be on of 3 types:
 	 * - Absolute. Started with "http:" or "https:". E.g. "http://yastatic.net/underscore/1.6.0/underscore.js",
 	 * - Html relative. Started with "html:". E.g. "html:js/example/logic/some-class.js".
-	 * 		It can be useful for scripts which is directly included in the page.
+	 *        It can be useful for scripts which is directly included in the page.
 	 * - Relative. Without prefix. Full url is found out by addition current script path and a given one.
 	 * @param doneCallBack Will be invoked when the last script would be loaded.
 	 */
@@ -48,7 +48,7 @@ window.ScriptLoader = window.ScriptLoader || {};
 
 	function pushUrlToStack(scriptUrlsBundle) {
 		urlsToLoadStack.push(LAST_SCRIPT_URL);
-		var fullUrls = scriptUrlsBundle.map(urlResolver.makeFullUrl);
+		var fullUrls = scriptUrlsBundle.map(urlResolver.makeFullUrl).map(urlSimplifier.simplify);
 		Array.prototype.push.apply(urlsToLoadStack, fullUrls.reverse());
 	}
 
@@ -62,10 +62,13 @@ window.ScriptLoader = window.ScriptLoader || {};
 	}
 
 	function loadOneScriptSync(url, onload) {
-		var script = document.createElement('script');
-		if (onload) {
-			script.onload = onload;
+		if (loadJournal.hasScriptAlreadyLoaded(url)) {
+			onload();
+			return;
 		}
+		loadJournal.markAsLoaded(url);
+		var script = document.createElement('script');
+		script.onload = onload;
 		script.src = url;
 		script.async = false;
 		document.head.appendChild(script);
@@ -88,10 +91,9 @@ window.ScriptLoader = window.ScriptLoader || {};
 	}
 
 	var urlResolver = (function createUrlResolver() {
-		var ret = {};
 		var HTML_PREFIX = "html:";
 
-		ret.makeFullUrl = function (url) {
+		function makeFullUrl(url) {
 			if (isAbsoluteUrl(url)) {
 				return url;
 			} else if (isHtmlRelative(url)) {
@@ -99,7 +101,7 @@ window.ScriptLoader = window.ScriptLoader || {};
 			} else {
 				return getCurrentScriptPath() + url;
 			}
-		}.bind(ret);
+		}
 
 		function isAbsoluteUrl(url) {
 			return url &&
@@ -112,15 +114,16 @@ window.ScriptLoader = window.ScriptLoader || {};
 					url.indexOf(HTML_PREFIX) === 0;
 		}
 
-		return ret;
+		return {
+			makeFullUrl: makeFullUrl
+		};
 	})();
 
 	var urlSimplifier = (function createUrlSimplifier() {
-		var ret = {};
-		ret.simplify = function(url) {
+		function simplify(url) {
 			var urlWithOutLevelUp = eliminateLevelUp(url);
 			return eliminateSameLevel(urlWithOutLevelUp);
-		};
+		}
 
 		function eliminateLevelUp(url) {
 			var ret = url;
@@ -139,7 +142,29 @@ window.ScriptLoader = window.ScriptLoader || {};
 			ret = ret.replace(/\/\.\//g, "/");
 			return ret;
 		}
-		return ret;
+
+		return {
+			simplify: simplify
+		};
+	})();
+
+	var loadJournal = (function () {
+		var loadedScript = [];
+
+		function hasScriptAlreadyLoaded(url) {
+			return loadedScript.indexOf(url) != -1;
+		}
+
+		function markAsLoaded(url) {
+			if (url !== LAST_SCRIPT_URL) {
+				loadedScript.push(url);
+			}
+		}
+
+		return {
+			hasScriptAlreadyLoaded: hasScriptAlreadyLoaded,
+			markAsLoaded: markAsLoaded
+		};
 	})();
 
 	//<editor-fold desc="Utils">
@@ -150,9 +175,10 @@ window.ScriptLoader = window.ScriptLoader || {};
 			return [val];
 		}
 	}
+
 	//</editor-fold>
 
-	//<editor-fold desc="Share private for test">
+	//<editor-fold desc="Share private stuff for test">
 	if (PrivateFunctionalityTester) {
 		PrivateFunctionalityTester.ScriptLoader = {};
 		PrivateFunctionalityTester.ScriptLoader.urlResolver = urlResolver;
