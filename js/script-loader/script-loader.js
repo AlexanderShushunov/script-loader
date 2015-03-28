@@ -11,7 +11,6 @@ window.ScriptLoader = window.ScriptLoader || {};
 	var loadParamsStack = [];
 	var urlsToLoadStack = [];
 
-
 	ScriptLoader.options = ScriptLoader.options || DEFAULT_OPT;
 
 	/**
@@ -116,6 +115,33 @@ window.ScriptLoader = window.ScriptLoader || {};
 		return ret;
 	})();
 
+	var urlSimplifier = (function createUrlSimplifier() {
+		var ret = {};
+		ret.simplify = function(url) {
+			var urlWithOutLevelUp = eliminateLevelUp(url);
+			return eliminateSameLevel(urlWithOutLevelUp);
+		};
+
+		function eliminateLevelUp(url) {
+			var ret = url;
+			var regExp = new RegExp("[^/]+/\\.\\./");
+			while (ret.match(regExp)) {
+				ret = ret.replace(regExp, "");
+			}
+			return ret;
+		}
+
+		function eliminateSameLevel(url) {
+			var ret = url;
+			if (ret.indexOf("./") === 0) {
+				ret = ret.substring("./".length);
+			}
+			ret = ret.replace(/\/\.\//g, "/");
+			return ret;
+		}
+		return ret;
+	})();
+
 	//<editor-fold desc="Utils">
 	function toArray(val) {
 		if (Array.isArray(val)) {
@@ -130,7 +156,8 @@ window.ScriptLoader = window.ScriptLoader || {};
 	if (PrivateFunctionalityTester) {
 		PrivateFunctionalityTester.ScriptLoader = {};
 		PrivateFunctionalityTester.ScriptLoader.urlResolver = urlResolver;
+		PrivateFunctionalityTester.ScriptLoader.urlSimplifier = urlSimplifier;
 	}
 	//</editor-fold>
 
-})(window.ScriptLoader, PrivateFunctionalityTester);
+})(window.ScriptLoader, window.PrivateFunctionalityTester);
