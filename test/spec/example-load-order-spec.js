@@ -15,7 +15,7 @@
 		}
 	});
 
-	j$.describe("Script Loader", function () {
+	j$.xdescribe("Script Loader", function () {
 		j$.it("should load example script in right order", function (done) {
 			exampleWin = window.open("../example/example.html");
 

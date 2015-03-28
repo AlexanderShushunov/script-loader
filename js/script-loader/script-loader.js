@@ -1,7 +1,7 @@
 "use strict";
 
 window.ScriptLoader = window.ScriptLoader || {};
-(function (ScriptLoader) {
+(function (ScriptLoader, PrivateFunctionalityTester) {
 
 	var LAST_SCRIPT_URL = getCurrentScriptPath() + "last-script.js";
 	var DEFAULT_OPT = {
@@ -125,4 +125,12 @@ window.ScriptLoader = window.ScriptLoader || {};
 		}
 	}
 	//</editor-fold>
-})(window.ScriptLoader);
+
+	//<editor-fold desc="Share private for test">
+	if (PrivateFunctionalityTester) {
+		PrivateFunctionalityTester.ScriptLoader = {};
+		PrivateFunctionalityTester.ScriptLoader.urlResolver = urlResolver;
+	}
+	//</editor-fold>
+
+})(window.ScriptLoader, PrivateFunctionalityTester);
