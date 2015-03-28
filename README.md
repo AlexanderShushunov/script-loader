@@ -16,9 +16,9 @@ You have to include _js\script-loader\script-loader.js_ in your page. _js\script
 ScriptLoader.load([
  "http://yastatic.net/underscore/1.6.0/underscore.js"
  "your_stuff.js",
- "utils/your_stuff-util.js"
+ "utils/super-util.js"
 ], function () {
- // you can use here underscore, your_stuff, your_stuff
+ // you can use here underscore, your_stuff, super-util
 });
 ```
 
