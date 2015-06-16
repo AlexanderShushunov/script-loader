@@ -20,7 +20,7 @@ window.ScriptLoader = window.ScriptLoader || {};
 	 * - Html relative. Started with "html:". E.g. "html:js/example/logic/some-class.js".
 	 *        It can be useful for scripts which is directly included in the page.
 	 * - Relative. Without prefix. Full url is found out by addition current script path and a given one.
-	 * @param doneCallBack Will be invoked when the last script would be loaded.
+	 * @param doneCallBack Will be invoked when the last script have been loaded.
 	 */
 	ScriptLoader.load = function (scriptUrlsBundle, doneCallBack) {
 		scriptUrlsBundle = toArray(scriptUrlsBundle);
